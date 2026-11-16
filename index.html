@@ -1,0 +1,194 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Gujarat Sales Intelligence Dashboard</title>
+<style>
+:root{--bg:#eef1f6;--card:#fff;--ink:#14213d;--mut:#6b7a90;--line:#e3e8f0;--side:#101a33;--ac:#3b5bfd;--soft:#f5f7fb;--c1:#3b5bfd;--c2:#14b8a0;--c3:#f5a623;--c4:#ef5d7a;--c5:#8b6cf6;--c6:#6db3ff;color-scheme:light}
+[data-theme=dark]{--bg:#0b1224;--card:#141d36;--ink:#e8edf8;--mut:#93a1bb;--line:#243052;--side:#070c1a;--soft:#192443;--ac:#5b78ff;--c1:#5b78ff;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0}body{background:var(--bg);color:var(--ink);font:14px/1.45 Inter,"Segoe UI",system-ui,sans-serif}
+.app{display:grid;grid-template-columns:236px minmax(0,1fr);min-height:100vh}
+aside{background:var(--side);color:#c9d3ea;padding:22px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:6px}
+.brand{display:flex;gap:10px;align-items:center;padding:0 8px 18px;border-bottom:1px solid #ffffff18;margin-bottom:10px}
+.logo{width:34px;height:34px;border-radius:10px;background:var(--ac);display:grid;place-items:center}
+.brand b{display:block;color:#fff;font-size:15px}.brand span{font-size:11px;color:#8d9bbb}
+nav{display:flex;flex-direction:column;gap:4px}
+nav button{all:unset;cursor:pointer;padding:11px 12px;border-radius:10px;color:#aab7d4;font-weight:600;display:flex;gap:10px;align-items:center}
+nav button:before{content:"";width:7px;height:7px;border-radius:50%;background:#3a4a74}
+nav button:hover{background:#ffffff0f;color:#fff}nav button.selected{background:var(--ac);color:#fff}nav button.selected:before{background:#fff}
+nav button:focus-visible,button:focus-visible,select:focus-visible{outline:2px solid var(--c2);outline-offset:2px}
+.side-foot{margin-top:auto;font-size:11px;color:#7f8eb0;padding:8px}
+.main{padding:22px clamp(14px,2.4vw,36px) 30px;min-width:0}
+header{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap;margin-bottom:18px}
+header small{color:var(--mut);font-size:12px;font-weight:600}header h1{margin:3px 0 4px;font-size:clamp(22px,2.4vw,30px);letter-spacing:-.6px}header p{margin:0;color:var(--mut);font-size:13px;max-width:720px}
+.tools{display:flex;gap:8px;align-items:center}
+button,select,input{font:inherit;font-size:13px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 12px;max-width:100%}
+button{cursor:pointer;font-weight:600}button:hover{border-color:var(--ac)}.primary{background:var(--ac);border-color:var(--ac);color:#fff}.primary:hover{filter:brightness(1.08)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px}
+#uploadPanel{display:flex;gap:14px;align-items:center;flex-wrap:wrap;border-style:dashed}#uploadPanel p{margin:0}#uploadPanel .grow{flex:1;min-width:220px}
+.muted,.note{color:var(--mut);font-size:12px}#status{color:var(--c2);font-weight:600}
+.badge{display:inline-block;background:#f5a62322;color:#b9770a;border-radius:99px;padding:3px 10px;font-size:11px;font-weight:700;margin-left:8px}[data-theme=dark] .badge{color:#ffc766}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.toolbar label{font-size:12px;color:var(--mut);font-weight:600}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:16px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:6px;min-height:118px}
+.kpi small{color:var(--mut);font-weight:600;font-size:12px}.kpi strong{font-size:clamp(22px,2.3vw,30px);letter-spacing:-.8px;line-height:1.1;overflow-wrap:anywhere}.kpi em{font-style:normal;color:var(--mut);font-size:12px;margin-top:auto}
+.kpi.lead{background:var(--ac);border-color:var(--ac);color:#fff}.kpi.lead small,.kpi.lead em{color:#dbe3ff}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px;margin-bottom:16px}
+.cc{grid-column:span 6;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;min-width:0}.cc.w8{grid-column:span 8}.cc.w4{grid-column:span 4}.cc.w12{grid-column:span 12}
+.cc h3{margin:0;font-size:15px}.cc p{margin:2px 0 12px;color:var(--mut);font-size:12px}.cv{position:relative;height:270px}.cv.tall{height:340px}
+h2{font-size:16px;margin:0 0 12px}
+.scroll{overflow:auto;max-height:520px;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:12.5px;white-space:nowrap;min-width:640px}th{position:sticky;top:0;background:var(--soft);color:var(--mut);text-align:left;font-size:12px}th,td{padding:10px 13px;border-bottom:1px solid var(--line)}tr:last-child td{border-bottom:0}tbody tr:hover td{background:var(--soft)}td{font-variant-numeric:tabular-nums}
+.pill{padding:2px 10px;border-radius:99px;font-size:11.5px;font-weight:700}.pill.bad{background:#ef5d7a22;color:#d6365a}.pill.good{background:#14b8a022;color:#0b8f7c}.pill.mid{background:#f5a62326;color:#b9770a}
+[data-theme=dark] .pill.bad{color:#ff8ca4}[data-theme=dark] .pill.good{color:#4fe0cb}[data-theme=dark] .pill.mid{color:#ffc766}
+.empty{padding:50px;text-align:center;color:var(--mut)}footer{color:var(--mut);font-size:12px;margin-top:6px}
+@media(max-width:1000px){.app{grid-template-columns:1fr}aside{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;padding:12px}.brand{border:0;padding:0;margin:0 8px 0 0}nav{flex-direction:row;overflow-x:auto;flex:1}nav button{white-space:nowrap}.side-foot{display:none}.cc,.cc.w8,.cc.w4{grid-column:span 12}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{aside,.tools,.filters,#uploadPanel{display:none!important}.app{display:block}body{background:#fff}.cc,.kpi,.panel{break-inside:avoid}}
+</style></head><body><div class="app">
+<aside><div class="brand"><div class="logo"><svg width="18" height="18" viewBox="0 0 18 18" fill="#fff"><rect x="1" y="9" width="4" height="8" rx="1"/><rect x="7" y="4" width="4" height="13" rx="1"/><rect x="13" y="1" width="4" height="16" rx="1"/></svg></div><div><b>Sales Intelligence</b><span>Gujarat · Head Office</span></div></div>
+<nav><button data-tab="summary" class="selected">ZSM performance</button><button data-tab="productivity">Low-productivity VBAs</button><button data-tab="ageing">Tenure performance</button><button data-tab="outlets">Outlet categories</button><button data-tab="actions">Action plans</button></nav>
+<div class="side-foot">Data comes from the Excel file the dashboard owner keeps in this repository.</div></aside>
+<div class="main"><header><div><small>vivo Gujarat · Retail Intelligence · V11 · Head Office</small><h1>Gujarat Sales Performance Dashboard</h1><p>Head Office intelligence · Sales performance · Workforce productivity · Outlet trends · Action priorities</p></div><div class="tools"><button id="themeBtn">Dark mode</button><button onclick="window.print()">Print</button></div></header>
+<section class="panel" id="uploadPanel"><div class="grow"><strong>Data source</strong><span class="badge" id="demoTag" hidden>Sample data</span><p class="muted">Reads <code>data/Sales_Data.xlsx</code> from this repository. Only the repository owner can replace that file, and this page has no upload option.</p></div><p id="status" role="status">Loading data…</p></section>
+<section class="panel filters"><div class="toolbar"><label for="month">Month</label><select id="month"><option value="ALL">All months</option></select><label for="zsm">ZSM</label><select id="zsm"><option value="ALL">All ZSMs</option></select><label for="exportType">Export</label><select id="exportType"><option value="low">Low productivity ISP</option><option value="ageing">All ISP &amp; ageing</option><option value="zsm">ZSM sales &amp; target</option><option value="types">Store type summary</option><option value="outlets">Outlet sales</option><option value="actions">Action plans</option></select><button id="csvBtn">Download CSV</button><button id="areaExport" class="primary">Open area view</button><label for="zsmExport">Individual ZSM</label><select id="zsmExport"><option value="">Select ZSM</option></select><button id="zsmExportBtn" class="primary">Open ZSM view</button></div>
+<p class="muted" style="margin:10px 0 0">ISP grades: Low below ₹8,00,000 · Average ₹8,00,000–₹15,00,000 · Top above ₹15,00,000. Sr ISPs are reported separately.</p></section>
+<section id="content"></section>
+<footer>Productivity and value gaps are review indicators, not automatic personnel decisions.</footer></div></div>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script><script>'use strict';
+const $=id=>document.getElementById(id),clean=x=>String(x??'').trim(),norm=x=>clean(x).toLowerCase().replace(/[^a-z0-9]/g,''),esc=x=>clean(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),fmt=x=>x==null?'N/A':Number(x).toLocaleString('en-IN',{maximumFractionDigits:0}),inr=x=>x==null?'N/A':'₹'+fmt(x),pct=x=>x==null?'N/A':x.toFixed(1)+'%',cash=x=>{if(x===null||x===undefined||clean(x)==='')return null;let n=Number(String(x).replace(/[₹,\s]/g,''));return Number.isFinite(n)?n:null};
+const get=(r,...names)=>{for(const n of names){const k=Object.keys(r).find(k=>norm(k)===norm(n));if(k!==undefined&&r[k]!==''&&r[k]!=null)return r[k]}return ''};
+const iso=v=>{if(v===null||v===undefined||v==='')return '';if(typeof v==='number'){let d=new Date(Date.UTC(1899,11,30)+Math.floor(v)*86400000);return d.toISOString().slice(0,10)}let s=clean(v);if(/^\d{4}-\d\d-\d\d/.test(s))return s.slice(0,10);let m=s.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);if(m)return `${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;let d=new Date(s);return isNaN(d)?'':d.toISOString().slice(0,10)};
+const role=x=>{let n=norm(x);return ['isp','vba'].includes(n)?'ISP':['srisp','srvba','seniorisp'].includes(n)?'Sr ISP':['zsm','asm','cm'].includes(n)?n.toUpperCase():clean(x)};
+const ageBands=['Below 3 months','3 to 6 months','6 to 12 months','1 to 3 years','3 to 5 years','5 to 7 years','Above 7 years'];
+function age(doj,month){if(!doj)return 'DOJ missing';let end=new Date(month+'-01T00:00:00Z');end=new Date(Date.UTC(end.getUTCFullYear(),end.getUTCMonth()+1,0));let start=new Date(doj+'T00:00:00Z');if(start>end)return 'Future DOJ';let n=(end.getUTCFullYear()-start.getUTCFullYear())*12+end.getUTCMonth()-start.getUTCMonth()-(end.getUTCDate()<start.getUTCDate()?1:0);return n<3?ageBands[0]:n<6?ageBands[1]:n<12?ageBands[2]:n<36?ageBands[3]:n<60?ageBands[4]:n<84?ageBands[5]:ageBands[6]}
+const grade=x=>x==null?'No mapped sales':x<800000?'Low':x<=1500000?'Average':'Top';
+function parseWorkbook(w){let master=w['VBA Details']||[],tx=w['Activation Sales Data']||[],targets=w.Target||[];if(!master.length&&!tx.length)throw Error('VBA Details and Activation Sales Data are empty');let people=new Map(),byName=new Map(),zsmNames=new Map(),stores=new Map(),sales=new Map(),pending=new Map(),months=new Set(),seen=new Set(),roleTargets=[],warnings=[];const cname=n=>zsmNames.get(norm(n))||clean(n)||'Unmapped ZSM';
+for(let r of master){let id=clean(get(r,'V-Work ID','V Work ID')),name=clean(get(r,'ISP Name','Name'));if(!id)continue;let p={id,name,role:role(get(r,'Role')),status:clean(get(r,'Status')),doj:iso(get(r,'Date Of Joining','DOJ')),md:clean(get(r,'MD Name')),zsm:clean(get(r,'ZSM')),asm:clean(get(r,'ASM')),cm:clean(get(r,'CM')),type:clean(get(r,'Store Type','Outlet Type')),target:cash(get(r,'Target','Monthly Value Target (INR)'))};people.set(id,p);if(name)byName.set(norm(name),p);if(p.zsm)zsmNames.set(norm(p.zsm),p.zsm)}
+for(let r of targets){let rl=role(get(r,'Role')),name=clean(get(r,'Name','ZSM Name','Employee Name')),id=clean(get(r,'V-Work ID','V Work ID')),value=cash(get(r,'Monthly Value Target (INR)','Target Value (INR)','Target Value','Target Value INR','Target'));if(value==null||value<=0)continue;roleTargets.push({role:rl,name,id,value});if(rl==='ZSM'&&name)zsmNames.set(norm(name),name)}
+const matchZsm=(n)=>{let exact=roleTargets.find(t=>t.role==='ZSM'&&norm(t.name)===norm(n));if(exact)return exact;let matches=roleTargets.filter(t=>t.role==='ZSM'&&t.name&&norm(t.name.split(/\s+/)[0])===norm(clean(n).split(/\s+/)[0]));return matches.length===1?matches[0]:null};
+let quality={rows:tx.length,duplicateIMEI:0,missingIMEI:0,missingValue:0,unmappedEmployee:0};
+for(let r of tx){let imei=clean(get(r,'IMEI','IMEI 1','IMEI Number')).replace(/\s/g,''),id=clean(get(r,'V Work ID','V-Work ID','Employee ID')),reporter=clean(get(r,'Reporter','ISP Name')),p=people.get(id)||byName.get(norm(reporter)),z=cname(get(r,'ZSM')||p?.zsm),code=clean(get(r,'Store Code')),name=clean(get(r,'Store Name')),type=clean(get(r,'Outlet Type','Store Type'))||p?.type||'Unspecified',md=clean(get(r,'MD Name'))||p?.md,act=iso(get(r,'Activation Date','Activated Date')),upload=iso(get(r,'Upload Date','DMS Upload Date')),value=cash(get(r,'Handset Value (INR)','Handset Value','Handset Value INR','Sales Value (INR)')),ref=act||upload,month=ref?ref.slice(0,7):'';
+if(!imei){quality.missingIMEI++;}else if(seen.has(imei)){quality.duplicateIMEI++;continue}else seen.add(imei);
+if(!month)continue;months.add(month);let key=month+'|'+z;let pen=pending.get(key)||{month,zsm:z,nonUploaded:0};if(!upload)pen.nonUploaded++;pending.set(key,pen);
+if(!act)continue;
+if(value==null){quality.missingValue++;continue}
+let sk=month+'|'+(p?.id||id);if(p&&['ISP','Sr ISP'].includes(p.role))sales.set(sk,(sales.get(sk)||0)+value);else quality.unmappedEmployee++;
+let storeKey=month+'|'+norm(z)+'|'+(code||norm(name)||norm(md)||'unknown');let o=stores.get(storeKey)||{month,code,name,md,zsm:z,type,value:0,imei:0,staff:new Set()};o.value+=value;o.imei++;if(p&&['ISP','Sr ISP'].includes(p.role))o.staff.add(p.id);stores.set(storeKey,o)}
+let ms=[...months].sort().reverse();let roster=[];for(let m of ms)for(let p of people.values()){if(!['ISP','Sr ISP'].includes(p.role))continue;let k=m+'|'+p.id,v=sales.has(k)?sales.get(k):null;roster.push({...p,month:m,value:v,grade:p.role==='ISP'?grade(v):'Sr ISP',age:age(p.doj,m)})}
+let zsmMap=new Map();for(let o of stores.values()){let k=o.month+'|'+o.zsm,rec=zsmMap.get(k)||{month:o.month,name:o.zsm,value:0,target:null,ach:null};rec.value+=o.value;zsmMap.set(k,rec)}
+for(let [k,pen] of pending){if(!zsmMap.has(k))zsmMap.set(k,{month:pen.month,name:pen.zsm,value:0,target:null,ach:null})}
+let zs=[...zsmMap.values()];for(let z of zs){let t=matchZsm(z.name);if(t){z.target=t.value;z.ach=z.value/t.value*100}}
+let out=[...stores.values()].map(o=>({...o,staffCount:o.staff.size,staff:undefined}));
+let typeCounts=new Map();for(let m of ms)for(let p of people.values()){if(!['ISP','Sr ISP'].includes(p.role)||/^(inactive|resigned|left|terminated)$/i.test(p.status))continue;let key=m+'|'+norm(p.zsm)+'|'+norm(p.type||'Unspecified'),rec=typeCounts.get(key)||{month:m,zsm:cname(p.zsm),type:p.type||'Unspecified',ispCount:0,srCount:0,value:0,matched:0};if(p.role==='ISP')rec.ispCount++;else rec.srCount++;let val=sales.get(m+'|'+p.id);if(val!=null){rec.value+=val;rec.matched++}typeCounts.set(key,rec)}
+let types=[...typeCounts.values()].map(r=>({...r,staffCount:r.ispCount+r.srCount,productivity:r.matched?r.value/r.matched:null}));
+return {months:ms,people:roster,zsm:zs,out,types,pending:[...pending.values()],quality,masterCount:people.size,generated:new Date().toISOString(),notes:warnings}}
+let DATA=window.__AREA_DATA__||null,tab='summary',MASTER_DATA=null,viewMode='ho';
+const COLS={zsm:[['ZSM','name'],['Sales Value (₹)','value'],['Target (₹)','target'],['Achievement','ach'],['Non Uploaded IMEI','nonUploaded']],people:[['Month','month'],['V-Work ID','id'],['ISP Name','name'],['Role','role'],['ZSM','zsm'],['Store Type','type'],['DOJ','doj'],['Ageing','age'],['Sales Value (₹)','value'],['Productivity','grade']],types:[['Month','month'],['ZSM','zsm'],['Store Type','type'],['ISP Count','ispCount'],['Sr ISP Count','srCount'],['Total Manpower','staffCount'],['Sales Value (₹)','value'],['Mapped Staff','matched'],['Avg Productivity (₹)','productivity']],out:[['Month','month'],['Store Code','code'],['Outlet','name'],['ZSM','zsm'],['Store Type','type'],['Sales Value (₹)','value'],['IMEI Count','imei'],['Mapped Staff','staffCount']]};
+const MONEY=new Set(['value','target','productivity','avg','total','gap']);
+function table(rows,cols,limit=70){return '<div class="scroll"><table><thead><tr>'+cols.map(c=>'<th>'+esc(c[0])+'</th>').join('')+'</tr></thead><tbody>'+rows.slice(0,limit).map(r=>'<tr>'+cols.map(c=>{let k=c[1],v=r[k];return '<td>'+esc(v==null?'N/A':k==='ach'?pct(v):MONEY.has(k)?inr(v):v)+'</td>'}).join('')+'</tr>').join('')+'</tbody></table></div>'+(rows.length>limit?'<p class="muted">Showing '+limit+' of '+fmt(rows.length)+' rows. Download CSV for the complete list.</p>':'')}
+function current(){let m=$('month').value,z=$('zsm').value;let f=x=>(m==='ALL'||x.month===m)&&(z==='ALL'||norm(x.zsm||x.name)===norm(z));let zz=DATA.zsm.filter(f).map(r=>{let p=DATA.pending.find(x=>x.month===r.month&&norm(x.zsm)===norm(r.name));return {...r,nonUploaded:p?.nonUploaded||0}});return {people:DATA.people.filter(f),zsm:zz,out:DATA.out.filter(f),types:DATA.types.filter(f),pending:DATA.pending.filter(f)}}
+function actions(d){let a=[];for(let p of d.people){if(p.role==='ISP'&&p.grade==='Low')a.push({zsm:p.zsm,priority:'High',subject:p.name,issue:'ISP productivity below ₹8,00,000',productivity:p.value,action:'Coach on conversion and review outlet potential',gap:Math.max(0,800000-p.value)})}for(let z of d.zsm){if(z.target!=null&&z.target>0&&z.value<z.target)a.push({zsm:z.name,priority:'High',subject:z.name,issue:'ZSM sales-value target gap',productivity:null,action:'Prioritize recovery across mapped outlets',gap:Math.max(0,z.target-z.value)})}return a}
+const ACTION_COLS=[['ZSM','zsm'],['Priority','priority'],['Subject','subject'],['Issue','issue'],['VBA Productivity (₹)','productivity'],['Recommended Action','action'],['Value Gap (₹)','gap']];
+
+function compactMoney(n){
+ if(n==null||!Number.isFinite(Number(n)))return 'N/A';
+ const v=Number(n);
+ if(Math.abs(v)>=10000000)return '₹'+(v/10000000).toFixed(2)+' Cr';
+ if(Math.abs(v)>=100000)return '₹'+(v/100000).toFixed(2)+' L';
+ if(Math.abs(v)>=1000)return '₹'+(v/1000).toFixed(1)+' K';
+ return '₹'+fmt(v);
+}
+let CH=[],Q=[],DEMO=false;
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim(),PAL=()=>['--c1','--c2','--c3','--c4','--c5','--c6'].map(css),sum=(a,f)=>a.reduce((s,x)=>s+(Number(f(x))||0),0);
+function grp(rows,k,f){const m=new Map();rows.forEach(r=>m.set(r[k]||'Unspecified',(m.get(r[k]||'Unspecified')||0)+(Number(f(r))||0)));return [...m.entries()].sort((a,b)=>b[1]-a[1])}
+function cfg(type,labels,ds,o={}){const tx=css('--mut'),gr=css('--line'),rd=type==='doughnut',F=o.f||compactMoney,val={beginAtZero:true,grid:{color:gr},ticks:{color:tx,callback:v=>F(v)}},cat={grid:{display:false},ticks:{color:tx}};return{type,data:{labels,datasets:ds},options:{responsive:true,maintainAspectRatio:false,indexAxis:o.h?'y':'x',cutout:rd?'66%':undefined,plugins:{legend:{display:ds.length>1||rd,position:'bottom',labels:{color:tx,boxWidth:10,usePointStyle:true}},tooltip:{callbacks:{label:c=>' '+(rd?c.label:c.dataset.label||c.label)+': '+F(rd?c.raw:c.parsed[o.h?'x':'y'])}}},scales:rd?{}:(o.h?{x:val,y:cat}:{x:cat,y:val})}}}
+function ch(id,t,s,w,type,labels,ds,o){Q.push([id,cfg(type,labels,ds,o)]);return '<div class="cc '+w+'"><h3>'+t+'</h3><p>'+s+'</p><div class="cv'+(o&&o.tall?' tall':'')+'"><canvas id="'+id+'"></canvas></div></div>'}
+const donut=(id,t,s,w,l,d,cols)=>ch(id,t,s,w,'doughnut',l,[{data:d,backgroundColor:cols||PAL(),borderWidth:0}],{f:fmt});
+const bars=(id,t,s,w,rows,lab,col,o={})=>ch(id,t,s,w,'bar',rows.map(r=>r[0]),[{label:lab,data:rows.map(r=>r[1]),backgroundColor:css(col||'--c1'),borderRadius:6,maxBarThickness:o.h?22:46}],o);
+function sec(t,h,n){return '<section class="panel"><h2>'+t+'</h2>'+h.replace(/<td>(Low|High)<\/td>/g,'<td><span class="pill bad">$1</span></td>').replace(/<td>Top<\/td>/g,'<td><span class="pill good">Top</span></td>').replace(/<td>Average<\/td>/g,'<td><span class="pill mid">Average</span></td>')+(n?'<p class="note">'+n+'</p>':'')+'</section>'}
+function demo(){let s=11;const R=()=>(s=s*16807%2147483647)/2147483647,zn=['Rahul Mehta','Kiran Patel','Amit Shah','Nisha Joshi','Vivek Desai','Pooja Trivedi'],fn=['Aarav','Diya','Karan','Meera','Rohan','Isha','Harsh','Tanvi','Jay','Riya','Manav','Sneha','Yash','Kavya'],ln=['Parmar','Solanki','Vyas','Chauhan','Gohil','Rana','Bhatt','Thakkar'],ty=['Exclusive Store','Multi Brand','Large Format','Key Account','Mass Market'],cities=['Rajkot','Surat','Vadodara','Ahmedabad','Jamnagar','Bhavnagar'],ms=['2026-11','2026-10','2026-09'],pd=[],zs=[],out=[],tr=[],pen=[];let id=1000,miss=0;
+const ro=[];zn.forEach((z,zi)=>{for(let i=0;i<12;i++)ro.push({id:'V'+id++,name:fn[(i+zi*3)%14]+' '+ln[(i*3+zi)%8],role:i%6===5?'Sr ISP':'ISP',status:'Active',doj:(2019+Math.floor(R()*7))+'-'+String(1+Math.floor(R()*9)).padStart(2,'0')+'-15',zsm:z,type:ty[(i+zi)%5]})});
+ms.forEach((m,mi)=>zn.forEach((z,zi)=>{let zv=0;const tv={};ro.filter(p=>p.zsm===z).forEach(p=>{let v=R()<.06?null:Math.round((400000+R()*1500000)*(1+(zi%3)*.05)*(1+(2-mi)*.03)/100)*100;if(v==null)miss++;pd.push({...p,month:m,value:v,grade:p.role==='ISP'?grade(v):'Sr ISP',age:age(p.doj,m)});const t=tv[p.type]=tv[p.type]||{v:0,i:0,sr:0,n:0};if(v!=null){t.v+=v;t.n++;zv+=v}p.role==='ISP'?t.i++:t.sr++});
+const tg=Math.round(zv*(.85+R()*.35)/1e4)*1e4;zs.push({month:m,name:z,value:zv,target:tg,ach:zv/tg*100});pen.push({month:m,zsm:z,nonUploaded:Math.floor(R()*18)});
+ty.forEach(t=>{const x=tv[t];if(!x)return;out.push({month:m,code:'GJ'+(100+zi*5+ty.indexOf(t)),name:cities[zi]+' – '+t,md:'',zsm:z,type:t,value:x.v,imei:Math.round(x.v/16000),staffCount:x.i+x.sr});tr.push({month:m,zsm:z,type:t,ispCount:x.i,srCount:x.sr,staffCount:x.i+x.sr,value:x.v,matched:x.n,productivity:x.n?x.v/x.n:null})})}));
+return{months:ms,people:pd,zsm:zs,out,types:tr,pending:pen,quality:{rows:out.reduce((a,o)=>a+o.imei,0),duplicateIMEI:0,missingIMEI:0,missingValue:miss,unmappedEmployee:0},masterCount:ro.length,generated:new Date().toISOString(),notes:[]}}
+if(!DATA){DATA=demo();DEMO=true}
+function show(){CH.forEach(c=>c.destroy());CH=[];Q=[];const tg=$('demoTag');if(tg)tg.hidden=!DEMO;
+if(!DATA){$('content').innerHTML='<div class="empty">Loading data…</div>';return}
+let d=current(),isp=d.people.filter(p=>p.role==='ISP'),value=sum(d.zsm,x=>x.value),tgs=d.zsm.filter(z=>z.target!=null),pu=sum(d.pending,x=>x.nonUploaded),low=isp.filter(p=>p.grade==='Low'),mp=isp.filter(p=>p.value!=null),tT=sum(tgs,x=>x.target),aT=sum(tgs,x=>x.value);
+const kp=[['Sales value',inr(value),mp.length?'Avg '+compactMoney(sum(mp,x=>x.value)/mp.length)+' per ISP':''],['Target achievement',tT?pct(aT/tT*100):'N/A',tT?compactMoney(aT)+' of '+compactMoney(tT):'No target mapped'],['Low productivity ISPs',low.length,isp.length?pct(low.length/isp.length*100)+' of ISPs':''],['ISPs with sales value',mp.length+' / '+isp.length,'Mapped to activations'],['Non-uploaded IMEI',pu,'Missing upload date']];
+let h='<div class="cards">'+kp.map((x,i)=>'<div class="kpi'+(i?'':' lead')+'"><small>'+esc(x[0])+'</small><strong>'+esc(x[1])+'</strong><em>'+esc(x[2])+'</em></div>').join('')+'</div><div class="grid">';
+const gd=['Low','Average','Top','No mapped sales'],gc=gd.map(g=>isp.filter(p=>p.grade===g).length),gcol=[css('--c4'),css('--c3'),css('--c2'),css('--mut')];
+if(tab==='summary'){const z=$('zsm').value,az=DATA.zsm.filter(x=>z==='ALL'||norm(x.name)===norm(z)),ms=[...DATA.months].reverse(),names=grp(d.zsm,'name',x=>x.value),tm=new Map(grp(d.zsm.filter(x=>x.target!=null),'name',x=>x.target));
+h+=ch('c1','Monthly sales vs target','Handset sales value by month','w8','bar',ms,[{type:'bar',label:'Sales value',data:ms.map(m=>sum(az.filter(x=>x.month===m),x=>x.value)),backgroundColor:css('--c1'),borderRadius:6,maxBarThickness:52},{type:'line',label:'Target',data:ms.map(m=>{const t=az.filter(x=>x.month===m&&x.target!=null);return t.length?sum(t,x=>x.target):null}),borderColor:css('--c3'),backgroundColor:css('--c3'),tension:.35,pointRadius:4,borderWidth:2.5}])+donut('c2','ISP productivity mix','Share of ISPs by grade','w4',gd,gc,gcol)+ch('c3','Sales and target by ZSM','Highest sales first','w12','bar',names.map(n=>n[0]),[{label:'Sales value',data:names.map(n=>n[1]),backgroundColor:css('--c1'),borderRadius:5,maxBarThickness:20},{label:'Target',data:names.map(n=>tm.get(n[0])??null),backgroundColor:css('--c6'),borderRadius:5,maxBarThickness:20}],{h:1,tall:names.length>6})+'</div>'+sec('ZSM performance detail',table(d.zsm.sort((a,b)=>b.value-a.value),COLS.zsm),'A ZSM target needs a matching named ZSM row in the Target sheet. Targets are never inferred.')}
+if(tab==='productivity')h+=donut('c1','Grade split','ISPs by productivity grade','w4',gd,gc,gcol)+bars('c2','Low-productivity ISPs by ZSM','Count below ₹8,00,000','w8',grp(low,'zsm',()=>1),'Low ISPs','--c4',{f:fmt})+'</div>'+sec('ISP productivity: handset sales value',table(isp.sort((a,b)=>(a.value??Infinity)-(b.value??Infinity)),COLS.people),'Sales need an IMEI, activation date, handset value and a mapped employee ID.');
+if(tab==='ageing'){const rows=ageBands.map(a=>{const g=isp.filter(p=>p.age===a),v=g.filter(p=>p.value!=null),t=sum(v,x=>x.value);return{age:a,count:g.length,mapped:v.length,total:t,avg:v.length?Math.round(t/v.length):null,low:v.filter(p=>p.grade==='Low').length,top:v.filter(p=>p.grade==='Top').length}});
+h+=bars('c1','Average sales by tenure','Employees with mapped sales','w6',rows.map(r=>[r.age,r.avg||0]),'Average sales','--c1')+bars('c2','Headcount by tenure','Roster count per cohort','w6',rows.map(r=>[r.age,r.count]),'ISPs','--c2',{f:fmt})+'</div>'+sec('ISP tenure performance',table(rows,[['Tenure','age'],['ISP count','count'],['With sales value','mapped'],['Sales value (₹)','total'],['Avg productivity (₹)','avg'],['Low ISPs','low'],['Top ISPs','top']]))}
+if(tab==='outlets')h+=bars('c1','Sales by store type','Total handset sales value','w8',grp(d.types,'type',x=>x.value),'Sales value','--c1')+donut('c2','Manpower by store type','Active ISP and Sr ISP headcount','w4',grp(d.types,'type',x=>x.staffCount).map(x=>x[0]),grp(d.types,'type',x=>x.staffCount).map(x=>x[1]))+'</div>'+sec('Store-type manpower and productivity',table(d.types.sort((a,b)=>b.value-a.value),COLS.types),'Average productivity uses employees with mapped sales; unmapped staff are excluded, not counted as zero.')+sec('Outlet sales value',table(d.out.sort((a,b)=>b.value-a.value),COLS.out));
+if(tab==='actions'){const a=actions(d);h+=bars('c1','Value gap by ZSM','Gap to ISP threshold or ZSM target','w8',grp(a,'zsm',x=>x.gap),'Value gap','--c4')+donut('c2','Action mix','Open actions by issue','w4',grp(a,'issue',()=>1).map(x=>x[0]),grp(a,'issue',()=>1).map(x=>x[1]),[css('--c4'),css('--c3')])+'</div>'+sec('ZSM action plans',table(a,ACTION_COLS),'ISP value gap is the difference to ₹8,00,000; ZSM gap is the outstanding named target value.')}
+if(!h.endsWith('</div>')&&tab!=='summary')h+='</div>';
+$('content').innerHTML=h;if(window.Chart){Chart.defaults.font.family=getComputedStyle(document.body).fontFamily;Q.forEach(([id,c])=>{const el=$(id);if(el)CH.push(new Chart(el,c))})}}
+document.addEventListener('DOMContentLoaded',()=>{const b=$('themeBtn'),set=t=>{document.documentElement.dataset.theme=t;b.textContent=t==='dark'?'Light mode':'Dark mode'};set(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');b.onclick=()=>{set(document.documentElement.dataset.theme==='dark'?'light':'dark');show()}});
+function populate(){let pm=$('month').value,pz=$('zsm').value,ms=DATA?.months||[],zs=[...new Set((DATA?.zsm||[]).map(x=>x.name))].sort();$('month').innerHTML='<option value="ALL">All months</option>'+ms.map(x=>'<option>'+esc(x)+'</option>').join('');$('month').value=ms.includes(pm)?pm:ms[0]||'ALL';$('zsm').innerHTML=DATA?.lockedZsm?zs.map(x=>'<option>'+esc(x)+'</option>').join(''):'<option value="ALL">All ZSMs</option>'+zs.map(x=>'<option>'+esc(x)+'</option>').join('');$('zsm').value=DATA?.lockedZsm?DATA.lockedZsm:(zs.includes(pz)?pz:'ALL');let zsExport=$('zsmExport');if(zsExport){let old=zsExport.value;zsExport.innerHTML='<option value="">Select ZSM</option>'+zs.map(x=>'<option>'+esc(x)+'</option>').join('');zsExport.value=zs.includes(old)?old:''}show()}
+function csv(rows,cols){return [cols.map(x=>x[0]),...rows.map(r=>cols.map(c=>r[c[1]]??''))].map(r=>r.map(v=>'"'+clean(v).replace(/"/g,'""')+'"').join(',')).join('\r\n')}
+function download(name,body,type){let a=document.createElement('a'),url=URL.createObjectURL(new Blob([body],{type}));a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),4000)}
+function exportCSV(){if(!DATA)return;let d=current(),kind=$('exportType').value,rows,cols;if(kind==='low'){rows=d.people.filter(p=>p.role==='ISP'&&p.grade==='Low');cols=COLS.people}else if(kind==='ageing'){rows=d.people.filter(p=>p.role==='ISP');cols=COLS.people}else if(kind==='zsm'){rows=d.zsm;cols=COLS.zsm}else if(kind==='types'){rows=d.types;cols=COLS.types}else if(kind==='outlets'){rows=d.out;cols=COLS.out}else{rows=actions(d);cols=ACTION_COLS}download('Gujarat_'+kind+'_'+$('month').value+'.csv','\uFEFF'+csv(rows,cols),'text/csv;charset=utf-8')}
+function enterAreaView(){
+ if(viewMode!=='ho'){returnToHo();return}
+ if(!DATA){alert('Data is not loaded yet.');return}
+ MASTER_DATA=MASTER_DATA||DATA;DATA=MASTER_DATA;viewMode='area';
+ document.querySelector('header small').textContent='vivo Gujarat · Retail Intelligence · Area View';
+ document.querySelector('header h1').textContent='Gujarat Area Sales Performance';
+ document.querySelector('header p').textContent='Area-wide sales performance · Workforce productivity · Outlet trends · Action priorities';
+ const upload=$('uploadPanel');if(upload)upload.style.display='none';
+ $('areaExport').textContent='Return to HO Dashboard';
+ $('zsmExportBtn').textContent='Open Selected ZSM View';
+ $('month').value='ALL';$('zsm').value='ALL';populate();
+}
+function enterZsmView(){
+ if(!DATA){alert('Data is not loaded yet.');return}
+ const selected=$('zsmExport').value,month=$('month').value;
+ if(!selected){alert('Select a ZSM.');return}
+ MASTER_DATA=MASTER_DATA||DATA;
+ const source=MASTER_DATA,normName=norm(selected),monthOK=r=>month==='ALL'||r.month===month,own=r=>norm(r.zsm||r.name)===normName;
+ const rows=source.zsm.filter(monthOK),grouped=new Map();
+ for(const r of rows)grouped.set(norm(r.name),(grouped.get(norm(r.name))||0)+Number(r.value||0));
+ const sorted=[...grouped.entries()].sort((a,b)=>b[1]-a[1]),rank=sorted.findIndex(([n])=>n===normName)+1;
+ DATA={months:source.months.filter(m=>month==='ALL'||m===month),people:source.people.filter(r=>own(r)&&monthOK(r)),zsm:source.zsm.filter(r=>own(r)&&monthOK(r)),out:source.out.filter(r=>own(r)&&monthOK(r)),types:source.types.filter(r=>own(r)&&monthOK(r)),pending:source.pending.filter(r=>own(r)&&monthOK(r)),quality:source.quality||{},masterCount:0,generated:source.generated,notes:[],rank:rank||null,rankTotal:sorted.length,lockedZsm:selected};
+ viewMode='zsm';tab='summary';
+ document.querySelector('header small').textContent='vivo Gujarat · Retail Intelligence · Confidential ZSM View';
+ document.querySelector('header h1').textContent=selected+' — Sales Performance';
+ document.querySelector('header p').textContent='Confidential individual ZSM report · Sales performance · Workforce productivity · Outlet trends';
+ const upload=$('uploadPanel');if(upload)upload.style.display='none';
+ $('areaExport').textContent='Return to HO Dashboard';$('zsmExportBtn').style.display='none';$('zsmExport').style.display='none';document.querySelector('label[for="zsmExport"]').style.display='none';
+ $('zsm').value=selected;populate();
+ const content=$('content');const rankPanel=document.createElement('section');rankPanel.className='panel';rankPanel.id='rankPanel';rankPanel.innerHTML='<strong>Gujarat ZSM Rank: '+(rank||'N/A')+' / '+sorted.length+'</strong><p class="muted">Rank based on sales value for '+esc(month==='ALL'?'all uploaded months':month)+'. This view only displays '+esc(selected)+' data.</p>';content.parentNode.insertBefore(rankPanel,content);
+}
+function returnToHo(){
+ if(!MASTER_DATA)return;
+ DATA=MASTER_DATA;viewMode='ho';tab='summary';
+ document.querySelector('header small').textContent='vivo Gujarat · Retail Intelligence · V11 · Head Office';
+ document.querySelector('header h1').textContent='Gujarat Sales Performance Dashboard';
+ document.querySelector('header p').textContent='Head Office intelligence · Sales performance · Workforce productivity · Outlet trends · Action priorities';
+ const upload=$('uploadPanel');if(upload)upload.style.display='';
+ const rp=$('rankPanel');if(rp)rp.remove();
+ $('areaExport').textContent='Open Area View';$('zsmExportBtn').style.display='';$('zsmExport').style.display='';document.querySelector('label[for="zsmExport"]').style.display='';
+ populate();
+}
+
+function boot(){if(DATA?.lockedZsm){for(const id of ['areaExport','zsmExportBtn','zsmExport','uploadPanel']){let el=$(id);if(el)el.remove()}let zl=document.querySelector('label[for="zsmExport"]');if(zl)zl.remove();}document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('selected',x===b));tab=b.dataset.tab;show()});$('month').onchange=show;$('zsm').onchange=show;$('csvBtn').onclick=exportCSV;let ze=$('zsmExportBtn');if(ze)ze.onclick=enterZsmView;let ae=$('areaExport');if(ae)ae.onclick=()=>{if(viewMode==='ho')enterAreaView();else returnToHo()};let file=$('file');if(file)file.onchange=async()=>{let f=file.files[0];if(!f)return;try{if(typeof XLSX==='undefined'){
+  $('status').textContent='Loading Excel reader…';
+  await new Promise((resolve,reject)=>{
+    const s=document.createElement('script');
+    s.src='https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js';
+    s.onload=resolve;
+    s.onerror=()=>reject(new Error('Could not load the Excel reader. Check your internet connection or try again later.'));
+    document.head.appendChild(s);
+  });
+  if(typeof XLSX==='undefined')throw Error('Excel reader did not load. Check your internet connection and refresh the page.');
+}$('status').textContent='Reading workbook…';await new Promise(r=>setTimeout(r,20));let book=XLSX.read(await f.arrayBuffer(),{type:'array'}),sheets={};for(let n of ['Target','VBA Details','Activation Sales Data'])sheets[n]=book.Sheets[n]?XLSX.utils.sheet_to_json(book.Sheets[n],{defval:'',raw:true}):[];DATA=parseWorkbook(sheets);MASTER_DATA=null;DEMO=false;$('status').textContent='Loaded '+fmt(DATA.quality.rows)+' activation rows; '+fmt(DATA.masterCount)+' employee records. Missing handset values: '+fmt(DATA.quality.missingValue)+'.';populate()}catch(e){$('status').textContent='Upload error: '+e.message;console.error(e)}};if(DATA)populate();else show()}
+document.addEventListener('DOMContentLoaded',boot);
+async function autoLoad(){const st=$('status');try{if(typeof XLSX==='undefined'){await new Promise((ok,no)=>{const s=document.createElement('script');s.src='https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js';s.onload=ok;s.onerror=()=>no(Error('Excel reader could not load. Check your internet connection.'));document.head.appendChild(s)})}
+const r=await fetch('data/Sales_Data.xlsx?v='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('data/Sales_Data.xlsx was not found (HTTP '+r.status+').');
+const book=XLSX.read(await r.arrayBuffer(),{type:'array'}),sheets={};for(const n of ['Target','VBA Details','Activation Sales Data'])sheets[n]=book.Sheets[n]?XLSX.utils.sheet_to_json(book.Sheets[n],{defval:'',raw:true}):[];
+DATA=parseWorkbook(sheets);MASTER_DATA=null;DEMO=false;const lm=r.headers.get('last-modified');st.textContent='Loaded '+fmt(DATA.quality.rows)+' activation rows · '+fmt(DATA.masterCount)+' employees'+(lm?' · published '+new Date(lm).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}):'');populate()}
+catch(e){st.textContent='Showing sample data. '+e.message;console.error(e)}}
+document.addEventListener('DOMContentLoaded',autoLoad);
+</script></body></html>
